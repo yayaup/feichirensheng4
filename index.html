@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飞驰人生 4 - 巅峰对决</title>
+    <style>
+        :root {
+            --primary: #f1c40f;
+            --secondary: #2c3e50;
+            --danger: #e74c3c;
+            --accent: #3498db;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #121212;
+            font-family: 'Segoe UI', "Microsoft YaHei", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        #game-container {
+            position: relative;
+            box-shadow: 0 0 100px rgba(0,0,0,0.8);
+            border: 4px solid #222;
+            border-radius: 24px;
+            overflow: hidden;
+            width: 500px;
+            height: 850px;
+        }
+
+        canvas {
+            display: block;
+            background-color: #a7c957; 
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.88);
+            z-index: 30;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-style: italic;
+            text-shadow: 4px 4px 0px #000;
+        }
+
+        .instructions {
+            margin: 30px 0;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        .btn {
+            padding: 16px 54px;
+            font-size: 1.4rem;
+            background: var(--primary);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        #hud {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .stat-badge {
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(8px);
+            padding: 10px 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-weight: bold;
+            font-size: 0.9rem;
+            min-width: 90px;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        #post-race-timer {
+            position: absolute;
+            top: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 6rem;
+            font-weight: 900;
+            color: var(--danger);
+            text-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
+            z-index: 25;
+            display: none;
+        }
+
+        #countdown {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            font-weight: 900;
+            color: white;
+            z-index: 25;
+        }
+
+        #last-lap-notice {
+            position: absolute;
+            top: 18%; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #fff;
+            background: var(--danger);
+            padding: 8px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            z-index: 20;
+            display: none;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .leaderboard {
+            width: 85%;
+            margin-top: 24px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 24px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 1.3rem;
+        }
+
+        .entry.winner { color: var(--primary); font-weight: bold; background: rgba(241, 196, 15, 0.1); border-radius: 10px; }
+        .hidden { display: none !important; }
+        
+        #off-road-warning {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--danger);
+            font-weight: bold;
+            font-size: 1.1rem;
+            background: rgba(0,0,0,0.6);
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="hud">
+        <div class="stat-badge">速度: <span id="speed-val">0</span></div>
+        <div class="stat-badge">圈数: <span id="lap-val">1</span>/3</div>
+        <div class="stat-badge" id="timer-val">时间: 0.0s</div>
+    </div>
+
+    <div id="post-race-timer">5</div>
+    <div id="countdown" class="hidden">3</div>
+    <div id="last-lap-notice">最后一圈!</div>
+    <div id="off-road-warning">离开赛道：动力受限</div>
+
+    <div id="start-screen" class="overlay">
+        <h1>飞驰人生 4</h1>
+        <div class="instructions">
+            <p><strong>既然不想输，那就一定要赢。</strong></p>
+            <p>方向键 / WASD 驾驶 | SHIFT 暴力漂移</p>
+            <p style="color: #bbb; font-size: 0.9rem;">戈壁赛道现已开启，注意草地降速风险</p>
+        </div>
+        <button class="btn" onclick="startGame()">全线推行</button>
+    </div>
+
+    <div id="end-screen" class="overlay hidden">
+        <h2 id="end-title" style="font-size: 2.5rem; color: var(--primary);">赛事排名</h2>
+        <div class="leaderboard" id="leaderboard-list"></div>
+        <button class="btn" style="margin-top: 30px;" onclick="resetGame()">再次出发</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const speedVal = document.getElementById('speed-val');
+    const lapVal = document.getElementById('lap-val');
+    const timerVal = document.getElementById('timer-val');
+    const postRaceTimerEl = document.getElementById('post-race-timer');
+    const countdownEl = document.getElementById('countdown');
+    const lastLapNotice = document.getElementById('last-lap-notice');
+    const offRoadWarning = document.getElementById('off-road-warning');
+
+    const COLORS = {
+        track: "#d2b48c", 
+        trackDetail: "#c2a679",
+        grass: "#a7c957",
+        curbRed: "#c0392b",
+        curbWhite: "#f5f5dc",
+        smokeDust: "#8d7b68",
+        smokeNormal: "#ffffff",
+        skidMark: "rgba(60, 50, 40, 0.4)"
+    };
+
+    const config = {
+        width: 500,
+        height: 850,
+        friction: 0.985,
+        offRoadFriction: 0.93,
+        driftFriction: 0.965,
+        turnSpeed: 0.058,
+        accel: 0.36,
+        maxSpeed: 13.5,
+        lapsToWin: 3,
+        cameraLerpPos: 0.12,
+        cameraLerpAngle: 0.038,
+        zoom: 0.5,
+        trackWidth: 380
+    };
+
+    canvas.width = config.width;
+    canvas.height = config.height;
+
+    const trackPoints = [
+        {x: 200, y: 200},
+        {x: 1300, y: 150},
+        {x: 2300, y: 550},
+        {x: 2000, y: 1300},
+        {x: 2600, y: 1900},
+        {x: 1500, y: 2700},
+        {x: 0, y: 2900},
+        {x: -900, y: 2100},
+        {x: -1600, y: 1400},
+        {x: -700, y: 600}
+    ];
+
+    let trees = [];
+    let shrubs = [];
+    let gameState = 'START';
+    let keys = {};
+    let player, ai;
+    let raceStartTime = 0;
+    let finishers = [];
+    let postRaceTimer = 5;
+    let postRaceInterval = null;
+    let confetti = [];
+
+    const camera = { x: 0, y: 0, angle: 0 };
+
+    function getDistanceToTrack(px, py) {
+        let minDistance = Infinity;
+        for (let i = 0; i < trackPoints.length; i++) {
+            const p1 = trackPoints[i];
+            const p2 = trackPoints[(i + 1) % trackPoints.length];
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const l2 = dx * dx + dy * dy;
+            let t = ((px - p1.x) * dx + (py - p1.y) * dy) / l2;
+            t = Math.max(0, Math.min(1, t));
+            const closestX = p1.x + t * dx;
+            const closestY = p1.y + t * dy;
+            const dist = Math.sqrt((px - closestX) ** 2 + (py - closestY) ** 2);
+            if (dist < minDistance) minDistance = dist;
+        }
+        return minDistance;
+    }
+
+    class SmokeParticle {
+        constructor(x, y, isDrift, isOffRoad) {
+            this.x = x; this.y = y;
+            this.size = Math.random() * (isDrift ? 25 : 12) + (isOffRoad ? 18 : 6);
+            this.life = 1.0;
+            this.vx = (Math.random() - 0.5) * 2;
+            this.vy = (Math.random() - 0.5) * 2;
+            this.color = isOffRoad ? COLORS.smokeDust : COLORS.smokeNormal;
+        }
+        update() { 
+            this.x += this.vx; this.y += this.vy; 
+            this.life -= 0.02; 
+            this.size += 0.8; 
+        }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.life * 0.4;
+            ctx.fillStyle = this.color;
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    class SkidMark {
+        constructor(x, y, angle) {
+            this.x = x; this.y = y; this.angle = angle;
+            this.life = 1.0;
+        }
+        update() { this.life -= 0.005; }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.life * 0.3;
+            ctx.fillStyle = COLORS.skidMark;
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.angle);
+            ctx.fillRect(-15, -12, 30, 4);
+            ctx.fillRect(-15, 8, 30, 4);
+            ctx.restore();
+        }
+    }
+
+    class Confetti {
+        constructor(x, y) {
+            this.x = x; this.y = y;
+            const colors = ['#f1c40f', '#e74c3c', '#3498db', '#2ecc71', '#ffffff'];
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.size = Math.random() * 10 + 6;
+            this.vx = (Math.random() - 0.5) * 22;
+            this.vy = (Math.random() - 0.5) * 22 - 12;
+            this.gravity = 0.4;
+            this.rotation = Math.random() * 360;
+            this.rSpeed = Math.random() * 20 - 10;
+        }
+        update() { this.x += this.vx; this.vy += this.gravity; this.y += this.vy; this.rotation += this.rSpeed; }
+        draw() {
+            ctx.save(); ctx.translate(this.x, this.y);
+            ctx.rotate(this.rotation * Math.PI / 180);
+            ctx.fillStyle = this.color; ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+            ctx.restore();
+        }
+    }
+
+    class Car {
+        constructor(x, y, color, name, isAI = false) {
+            this.x = x; this.y = y; this.color = color; this.name = name;
+            this.angle = 0; this.speed = 0; 
+            this.isAI = isAI;
+            this.drifting = false; this.isOffRoad = false;
+            this.driftAngle = 0; this.laps = 0; this.checkpoint = 0;
+            this.aiTargetIdx = 1; this.width = 46; this.height = 26; this.radius = 24;
+            this.totalTime = null; this.isFinished = false; 
+            this.particles = [];
+            this.skidMarks = [];
+        }
+
+        update() {
+            this.particles.forEach(p => p.update());
+            this.particles = this.particles.filter(p => p.life > 0);
+            this.skidMarks.forEach(s => s.update());
+            this.skidMarks = this.skidMarks.filter(s => s.life > 0);
+
+            if (gameState === 'START' || gameState === 'COUNTDOWN') return;
+
+            const dist = getDistanceToTrack(this.x, this.y);
+            this.isOffRoad = dist > config.trackWidth / 2;
+            if (!this.isAI) offRoadWarning.style.display = this.isOffRoad ? 'block' : 'none';
+
+            if (!this.isFinished) {
+                if (this.isAI) this.updateAI();
+                else this.updatePlayer();
+
+                let moveAngle = this.angle;
+                const currentFriction = this.isOffRoad ? config.offRoadFriction : config.friction;
+                
+                if (this.drifting) {
+                    this.speed *= config.driftFriction;
+                    moveAngle += this.driftAngle;
+                    for(let i=0; i<3; i++) this.emitParticle(true);
+                    if (Math.abs(this.speed) > 2) {
+                        this.skidMarks.push(new SkidMark(this.x, this.y, this.angle + this.driftAngle));
+                    }
+                } else {
+                    this.speed *= currentFriction;
+                    this.driftAngle *= 0.8;
+                    if (Math.abs(this.speed) > 4.5) this.emitParticle(false);
+                }
+
+                const speedLimit = this.isOffRoad ? config.maxSpeed * 0.45 : (this.drifting ? config.maxSpeed * 0.75 : config.maxSpeed);
+                if (this.speed > speedLimit) this.speed -= 0.6;
+
+                this.x += Math.cos(moveAngle) * this.speed;
+                this.y += Math.sin(moveAngle) * this.speed;
+                this.checkProgress();
+            } else {
+                this.speed *= 0.95;
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+            }
+
+            this.handleCollisions();
+        }
+
+        emitParticle(isDrift) {
+            const backX = this.x - Math.cos(this.angle) * 22;
+            const backY = this.y - Math.sin(this.angle) * 22;
+            this.particles.push(new SmokeParticle(backX, backY, isDrift, this.isOffRoad));
+        }
+
+        updatePlayer() {
+            const isDriftKey = keys['ShiftLeft'] || keys['ShiftRight'] || keys['Space'];
+            let turnMod = Math.min(Math.abs(this.speed) / 4.8, 1.4) * config.turnSpeed;
+            if (this.isOffRoad) turnMod *= 0.65;
+
+            if (keys['ArrowLeft'] || keys['KeyA']) {
+                this.angle -= turnMod;
+                if (isDriftKey && this.speed > 3.8) {
+                    this.drifting = true;
+                    this.driftAngle = Math.min(this.driftAngle + 0.08, 0.6);
+                }
+            } else if (keys['ArrowRight'] || keys['KeyD']) {
+                this.angle += turnMod;
+                if (isDriftKey && this.speed > 3.8) {
+                    this.drifting = true;
+                    this.driftAngle = Math.max(this.driftAngle - 0.08, -0.6);
+                }
+            } else this.drifting = false;
+
+            if (keys['ArrowUp'] || keys['KeyW']) this.speed += config.accel;
+            else if (keys['ArrowDown'] || keys['KeyS']) this.speed -= config.accel * 0.8;
+
+            if (this.speed < -3) this.speed = -3;
+            speedVal.innerText = Math.abs(Math.round(this.speed * 18)) + " KM/H";
+        }
+
+        updateAI() {
+            let currentTarget = trackPoints[this.aiTargetIdx];
+            let dx = currentTarget.x - this.x;
+            let dy = currentTarget.y - this.y;
+            let lookAheadDist = Math.sqrt(dx*dx + dy*dy);
+            
+            let desiredAngle = Math.atan2(dy, dx);
+            let angleDiff = desiredAngle - this.angle;
+            while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+            while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+
+            // 核心修复：更敏感的转向和更近的切换距离
+            // 增加转向灵敏度，使 AI 紧贴赛道中心
+            const steeringForce = lookAheadDist < 400 ? 0.32 : 0.22; 
+            this.angle += angleDiff * steeringForce;
+
+            // 增强弯道制动预判，防止冲出赛道
+            let curveIntensity = Math.abs(angleDiff);
+            // 如果弯角很大，大幅减速以确保不会因惯性冲出去
+            let throttle = curveIntensity > 0.3 ? 0.45 : 0.95;
+
+            // 核心修复：缩小切换半径 (从400改为220)
+            // 这样 AI 会行驶到转弯点更深的位置才瞄向下一个路点，避免提前切入草地
+            if (lookAheadDist < 220) {
+                this.aiTargetIdx = (this.aiTargetIdx + 1) % trackPoints.length;
+            }
+            this.speed += config.accel * throttle;
+            const aiLimit = this.isOffRoad ? config.maxSpeed * 0.4 : config.maxSpeed * 0.86;
+            if (this.speed > aiLimit) this.speed = aiLimit;
+        }
+
+        handleCollisions() {
+            const other = this.isAI ? player : ai;
+            if (!other) return;
+            const dx = other.x - this.x;
+            const dy = other.y - this.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            const minDist = this.radius + other.radius;
+            if (dist < minDist) {
+                const angle = Math.atan2(dy, dx);
+                this.x -= Math.cos(angle) * 4;
+                this.y -= Math.sin(angle) * 4;
+                this.speed *= 0.65;
+            }
+        }
+
+        checkProgress() {
+            let nextCpIdx = (this.checkpoint + 1) % trackPoints.length;
+            let cp = trackPoints[nextCpIdx];
+            let dist = Math.sqrt((this.x - cp.x)**2 + (this.y - cp.y)**2);
+            // 为了匹配 AI 逻辑，终点检测范围也稍微调整
+            let detectionRange = nextCpIdx === 0 ? 180 : 450;
+
+            if (dist < detectionRange) {
+                this.checkpoint = nextCpIdx;
+                if (this.checkpoint === 0) {
+                    this.laps++;
+                    if (!this.isAI) {
+                        lapVal.innerText = Math.min(this.laps + 1, config.lapsToWin);
+                        if (this.laps === config.lapsToWin - 1) {
+                            lastLapNotice.style.display = 'block';
+                            setTimeout(() => lastLapNotice.style.display = 'none', 1500); 
+                        }
+                    }
+                    if (this.laps >= config.lapsToWin) {
+                        this.isFinished = true;
+                        this.totalTime = ((Date.now() - raceStartTime) / 1000).toFixed(2);
+                        finishers.push(this);
+                        if (!this.isAI && finishers.length === 1) spawnConfetti();
+                        if (finishers.length === 2) {
+                            if (postRaceInterval) clearInterval(postRaceInterval);
+                            showLeaderboard();
+                        } else if (finishers.length === 1) startPostRaceCountdown();
+                    }
+                }
+            }
+        }
+
+        draw() {
+            this.skidMarks.forEach(s => s.draw());
+            this.particles.forEach(p => p.draw());
+
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.angle + (this.drifting ? this.driftAngle : 0));
+            ctx.shadowBlur = 15; ctx.shadowColor = "rgba(0,0,0,0.4)";
+            
+            ctx.fillStyle = "#111";
+            ctx.beginPath(); ctx.roundRect(-this.width/2 - 2, -this.height/2 - 2, this.width + 4, this.height + 4, 6); ctx.fill();
+
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.moveTo(-this.width/2, -this.height/2);
+            ctx.lineTo(this.width/2 - 14, -this.height/2);
+            ctx.quadraticCurveTo(this.width/2 + 10, 0, this.width/2 - 14, this.height/2);
+            ctx.lineTo(-this.width/2, this.height/2);
+            ctx.closePath(); ctx.fill();
+
+            ctx.fillStyle = "#000"; ctx.fillRect(-this.width/2 - 8, -this.height/2 - 6, 12, this.height + 12);
+            ctx.fillStyle = "#1a1a1a"; ctx.beginPath(); ctx.ellipse(0, 0, 14, 10, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "rgba(255,255,255,0.25)"; ctx.beginPath(); ctx.ellipse(6, 0, 8, 8, 0, 0, Math.PI * 2); ctx.fill();
+
+            ctx.fillStyle = "white"; ctx.font = "bold 12px Arial"; ctx.textAlign = "center";
+            ctx.fillText(this.isAI ? "02" : "01", -12, 5);
+            ctx.restore();
+        }
+    }
+
+    function spawnConfetti() { for(let i=0; i<200; i++) confetti.push(new Confetti(player.x, player.y)); }
+
+    function drawTree(t) {
+        ctx.save();
+        ctx.translate(t.x, t.y);
+        ctx.fillStyle = "rgba(0,0,0,0.12)";
+        ctx.beginPath(); ctx.ellipse(5, 5, t.size * 0.5, t.size * 0.3, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#3e2723";
+        ctx.fillRect(-t.size * 0.08, 0, t.size * 0.16, t.size * 0.5);
+        const treeColors = ["#1b5e20", "#2e7d32", "#4caf50"];
+        treeColors.forEach((c, i) => {
+            ctx.fillStyle = c;
+            ctx.beginPath();
+            ctx.arc(0, -t.size * 0.4 * i, t.size * (1 - i * 0.25), 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "rgba(0,0,0,0.1)";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        });
+        ctx.restore();
+    }
+
+    function drawShrub(s) {
+        ctx.save();
+        ctx.translate(s.x, s.y);
+        ctx.fillStyle = "#33691e";
+        for(let i=0; i<3; i++) {
+            ctx.beginPath();
+            ctx.arc((i-1)*s.size*0.4, 0, s.size, 0, Math.PI*2);
+            ctx.fill();
+        }
+        ctx.restore();
+    }
+
+    function initEnvironment() {
+        trees = [];
+        shrubs = [];
+        trackPoints.forEach((p) => {
+            for(let j=0; j<15; j++) {
+                let x = p.x + (Math.random()-0.5)*2600;
+                let y = p.y + (Math.random()-0.5)*2600;
+                if (getDistanceToTrack(x, y) > config.trackWidth/2 + 80) {
+                    trees.push({ x, y, size: 40 + Math.random()*50 });
+                }
+            }
+            for(let k=0; k<10; k++) {
+                let x = p.x + (Math.random()-0.5)*2000;
+                let y = p.y + (Math.random()-0.5)*2000;
+                if (getDistanceToTrack(x, y) > config.trackWidth/2 + 60) {
+                    shrubs.push({ x, y, size: 10 + Math.random()*10 });
+                }
+            }
+        });
+    }
+
+    function drawWorld() {
+        ctx.fillStyle = COLORS.grass; 
+        ctx.fillRect(-15000, -15000, 30000, 30000);
+        ctx.lineJoin = "round"; ctx.lineCap = "round";
+        
+        ctx.strokeStyle = COLORS.curbWhite; ctx.lineWidth = config.trackWidth + 40;
+        ctx.beginPath(); ctx.moveTo(trackPoints[0].x, trackPoints[0].y);
+        trackPoints.forEach(p => ctx.lineTo(p.x, p.y)); ctx.closePath(); ctx.stroke();
+        ctx.strokeStyle = COLORS.curbRed; ctx.setLineDash([80, 80]); ctx.stroke(); ctx.setLineDash([]);
+
+        ctx.strokeStyle = COLORS.track; ctx.lineWidth = config.trackWidth; ctx.stroke();
+        
+        ctx.strokeStyle = COLORS.trackDetail; ctx.lineWidth = config.trackWidth - 40;
+        ctx.setLineDash([2, 10]); ctx.stroke(); ctx.setLineDash([]);
+
+        shrubs.forEach(s => drawShrub(s));
+        trees.forEach(t => drawTree(t));
+
+        ctx.save();
+        ctx.translate(trackPoints[0].x, trackPoints[0].y);
+        ctx.rotate(Math.atan2(trackPoints[1].y - trackPoints[0].y, trackPoints[1].x - trackPoints[0].x) + Math.PI/2);
+        for(let x=-200; x<200; x+=50) {
+            for(let y=-25; y<25; y+=25) {
+                ctx.fillStyle = (Math.floor(x/50) + Math.floor(y/25)) % 2 === 0 ? "#fff" : "#222";
+                ctx.fillRect(x, y, 50, 25);
+            }
+        }
+        ctx.restore();
+    }
+
+    function startPostRaceCountdown() {
+        if (postRaceInterval) clearInterval(postRaceInterval);
+        postRaceTimer = 5; postRaceTimerEl.style.display = 'block'; postRaceTimerEl.innerText = postRaceTimer;
+        postRaceInterval = setInterval(() => {
+            postRaceTimer--; postRaceTimerEl.innerText = postRaceTimer;
+            if (postRaceTimer <= 0) { clearInterval(postRaceInterval); showLeaderboard(); }
+        }, 1000);
+    }
+
+    function showLeaderboard() {
+        gameState = 'END'; document.getElementById('end-screen').classList.remove('hidden');
+        postRaceTimerEl.style.display = 'none'; offRoadWarning.style.display = 'none';
+        const list = document.getElementById('leaderboard-list'); list.innerHTML = "";
+        const all = [player, ai].sort((a, b) => {
+            if (a.isFinished && b.isFinished) return a.totalTime - b.totalTime;
+            return a.isFinished ? -1 : 1;
+        });
+        const endTitle = document.getElementById('end-title');
+        endTitle.innerText = (all[0] === player && player.isFinished) ? "巴音布鲁克最强者！" : "赛事圆满结束";
+        all.forEach((car, i) => {
+            const entry = document.createElement('div');
+            entry.className = `entry ${i === 0 && car.isFinished ? 'winner' : ''}`;
+            entry.innerHTML = `<span>${i+1}. ${car.name}</span><span>${car.isFinished ? car.totalTime + 's' : 'DNF'}</span>`;
+            list.appendChild(entry);
+        });
+    }
+
+    function loop() {
+        ctx.setTransform(1, 0, 0, 1, 0, 0); 
+        ctx.fillStyle = COLORS.grass; 
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        if (gameState !== 'START') {
+            camera.x += (player.x - camera.x) * config.cameraLerpPos;
+            camera.y += (player.y - camera.y) * config.cameraLerpPos;
+            let targetAngle = -player.angle - Math.PI/2;
+            let diff = targetAngle - camera.angle;
+            while (diff < -Math.PI) diff += Math.PI * 2;
+            while (diff > Math.PI) diff -= Math.PI * 2;
+            camera.angle += diff * config.cameraLerpAngle;
+
+            ctx.translate(canvas.width / 2, canvas.height / 2); ctx.rotate(camera.angle);
+            ctx.scale(config.zoom, config.zoom); ctx.translate(-camera.x, -camera.y);
+
+            drawWorld();
+            if (ai) { ai.update(); ai.draw(); }
+            if (player) { player.update(); player.draw(); }
+            confetti.forEach(c => { c.update(); c.draw(); });
+            confetti = confetti.filter(c => c.y < camera.y + 4000);
+
+            if (gameState === 'RACING') timerVal.innerText = `时间: ${((Date.now() - raceStartTime)/1000).toFixed(1)}s`;
+        }
+        requestAnimationFrame(loop);
+    }
+
+    function startGame() {
+        document.getElementById('start-screen').classList.add('hidden');
+        finishers = []; confetti = []; if (postRaceInterval) clearInterval(postRaceInterval);
+        player = new Car(trackPoints[0].x, trackPoints[0].y + 90, "#f1c40f", "张驰 (玩家)");
+        ai = new Car(trackPoints[0].x, trackPoints[0].y - 90, "#3498db", "林臻东 (AI)", true);
+        initEnvironment();
+        gameState = 'COUNTDOWN'; countdownEl.classList.remove('hidden');
+        let c = 3; countdownEl.innerText = c;
+        let itv = setInterval(() => {
+            c--; if (c > 0) countdownEl.innerText = c;
+            else if (c === 0) countdownEl.innerText = "GO!";
+            else { clearInterval(itv); countdownEl.classList.add('hidden'); gameState = 'RACING'; raceStartTime = Date.now(); }
+        }, 1000);
+    }
+
+    function resetGame() { document.getElementById('end-screen').classList.add('hidden'); startGame(); }
+
+    window.addEventListener('keydown', e => keys[e.code] = true);
+    window.addEventListener('keyup', e => keys[e.code] = false);
+    window.onload = loop;
+</script>
+</body>
+</html>
