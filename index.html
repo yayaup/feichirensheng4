@@ -14,17 +14,11 @@
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
+            margin: 0; padding: 0; overflow: hidden;
             background-color: #0a0a0a;
             font-family: 'Segoe UI', "Microsoft YaHei", sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: white;
-            touch-action: none;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; color: white; touch-action: none;
         }
 
         #game-container {
@@ -33,208 +27,99 @@
             border: 2px solid #333;
             border-radius: 30px;
             overflow: hidden;
-            width: 500px;
-            height: 850px;
+            width: 500px; height: 850px;
             background: #121212;
         }
 
-        canvas {
-            display: block;
-            background-color: #a7c957; 
-        }
+        canvas { display: block; background-color: #a7c957; }
 
         .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 30;
-            text-align: center;
-            transition: all 0.5s ease;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 30; text-align: center; transition: all 0.5s ease;
         }
 
-        #start-screen {
-            background: radial-gradient(circle at center, #1e272e 0%, #0a0a0a 100%);
-        }
-
+        #start-screen { background: radial-gradient(circle at center, #1e272e 0%, #0a0a0a 100%); }
         #start-screen h1 {
-            font-size: 4.5rem;
-            margin: 0;
-            color: var(--primary);
-            text-transform: uppercase;
-            font-style: italic;
-            font-weight: 900;
-            letter-spacing: -2px;
-            text-shadow: 0 0 20px rgba(241, 196, 15, 0.4), 4px 4px 0px #000;
+            font-size: 4.5rem; margin: 0; color: var(--primary);
+            text-transform: uppercase; font-style: italic; font-weight: 900;
+            letter-spacing: -2px; text-shadow: 0 0 20px rgba(241, 196, 15, 0.4), 4px 4px 0px #000;
             transform: skew(-5deg);
         }
 
         #motivational-quote {
-            margin: 50px 0 15px 0;
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--primary);
-            text-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
-            max-width: 85%;
-            line-height: 1.4;
+            margin: 40px 0 15px 0; font-size: 1.3rem; font-weight: bold;
+            color: var(--primary); text-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
+            max-width: 85%; line-height: 1.4; min-height: 1.8em;
         }
 
         #best-record-display {
-            font-size: 1rem;
-            color: #888;
-            margin-bottom: 30px;
-            background: rgba(255,255,255,0.05);
-            padding: 8px 25px;
-            border-radius: 20px;
-            letter-spacing: 1px;
+            font-size: 1rem; color: #888; margin-bottom: 30px;
+            background: rgba(255,255,255,0.05); padding: 8px 25px; border-radius: 20px;
         }
 
         .settings-option {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.1rem;
-            color: #fff;
-            cursor: pointer;
-            user-select: none;
-            background: rgba(0,0,0,0.3);
-            padding: 10px 20px;
-            border-radius: 30px;
+            margin-bottom: 15px; display: flex; align-items: center; gap: 12px;
+            font-size: 1.1rem; color: #fff; cursor: pointer; user-select: none;
+            background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 30px;
             border: 1px solid rgba(255,255,255,0.1);
         }
 
         .settings-option input {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--primary);
+            width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary);
         }
 
         .difficulty-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 35px;
-            background: rgba(255,255,255,0.05);
-            padding: 12px 20px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; gap: 10px; margin-bottom: 35px;
+            background: rgba(255,255,255,0.05); padding: 12px 20px;
+            border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .difficulty-group span {
-            font-weight: bold;
-            color: var(--primary);
-            margin-right: 5px;
-        }
-
-        .difficulty-group label {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: color 0.2s;
-        }
-
-        .difficulty-group label:hover {
-            color: var(--primary);
-        }
+        .difficulty-group span { font-weight: bold; color: var(--primary); margin-right: 5px; }
+        .difficulty-group label { display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 1rem; }
+        .difficulty-group input { accent-color: var(--primary); }
 
         .btn {
-            padding: 18px 65px;
-            font-size: 1.5rem;
+            padding: 18px 65px; font-size: 1.5rem;
             background: linear-gradient(135deg, var(--primary) 0%, #d4ac0d 100%);
-            color: #000;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-weight: 900;
-            letter-spacing: 3px;
-            box-shadow: 0 5px 15px rgba(241, 196, 15, 0.3);
+            color: #000; border: none; border-radius: 50px;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 900; letter-spacing: 3px; box-shadow: 0 5px 15px rgba(241, 196, 15, 0.3);
         }
 
-        .btn:hover {
-            transform: scale(1.1) translateY(-3px);
-            box-shadow: 0 15px 30px rgba(241, 196, 15, 0.5);
-            background: #fff;
-        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         #hud {
-            position: absolute;
-            top: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            z-index: 10;
-            pointer-events: none;
+            position: absolute; top: 20px; width: 100%;
+            display: flex; justify-content: space-around; z-index: 10; pointer-events: none;
         }
 
         .stat-badge {
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            padding: 12px 20px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: var(--primary);
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
+            padding: 12px 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);
+            font-weight: bold; font-size: 0.9rem; color: var(--primary);
         }
 
         #post-race-timer {
-            position: absolute;
-            top: 150px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 6rem;
-            font-weight: 900;
-            color: var(--danger);
-            text-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
-            z-index: 25;
-            display: none;
+            position: absolute; top: 150px; left: 50%; transform: translateX(-50%);
+            font-size: 6rem; font-weight: 900; color: var(--danger);
+            text-shadow: 0 0 30px rgba(231, 76, 60, 0.8); z-index: 25; display: none;
         }
 
         #countdown {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 8rem;
-            font-weight: 900;
-            color: white;
-            text-shadow: 0 0 40px rgba(0,0,0,0.8);
-            z-index: 25;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 8rem; font-weight: 900; color: white;
+            text-shadow: 0 0 40px rgba(0,0,0,0.8); z-index: 25;
         }
 
         #last-lap-notice {
-            position: absolute;
-            top: 15%; 
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--danger);
-            text-shadow: 2px 2px 0px #fff, 0px 0px 15px rgba(231, 76, 60, 0.3);
-            z-index: 20;
-            display: none;
-            pointer-events: none;
-            white-space: nowrap;
+            position: absolute; top: 15%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 2rem; font-weight: 900; color: var(--danger);
+            text-shadow: 2px 2px 0px #fff; z-index: 20; display: none; white-space: nowrap;
         }
 
-        .flash-twice {
-            animation: blink-twice 0.25s ease-in-out 2;
-        }
-
-        @keyframes blink-twice {
-            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.3; transform: translate(-50%, -50%) scale(1.1); }
-        }
-
+        .flash-twice { animation: blink-twice 0.25s ease-in-out 2; }
+        @keyframes blink-twice { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -251,10 +136,8 @@
     <div id="countdown" class="hidden">3</div>
     <div id="last-lap-notice">最后一圈!</div>
 
-    <!-- 开始界面 -->
     <div id="start-screen" class="overlay">
         <h1>飞驰人生 4</h1>
-        
         <div id="motivational-quote">热爱，是唯一的借口</div>
         <div id="best-record-display">历史最快纪录: 暂无</div>
         
@@ -263,7 +146,6 @@
             镜头旋转跟随赛车
         </label>
 
-        <!-- 难度选项 -->
         <div class="difficulty-group">
             <span>难度：</span>
             <label><input type="radio" name="difficulty" value="0.8"> 简单</label>
@@ -271,10 +153,9 @@
             <label><input type="radio" name="difficulty" value="1.035"> 困难</label>
         </div>
 
-        <button class="btn" onclick="startGame()">全线推行</button>
+        <button id="start-btn" class="btn" onclick="startGame()">全线推行</button>
     </div>
 
-    <!-- 结算界面 -->
     <div id="end-screen" class="overlay hidden" style="background: rgba(0,0,0,0.95);">
         <h2 id="end-title" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px; transform: skew(-5deg);">赛事排行榜</h2>
         <div id="leaderboard-list" style="width:85%; background:rgba(255,255,255,0.03); padding:25px; border-radius:20px; border:1px solid rgba(255,255,255,0.05);"></div>
@@ -295,162 +176,80 @@
     const countdownEl = document.getElementById('countdown');
     const quoteEl = document.getElementById('motivational-quote');
     const bestRecordEl = document.getElementById('best-record-display');
+    const startBtn = document.getElementById('start-btn');
 
     const COLORS = {
         track: "#d2b48c", 
         trackDetail: "#c9ad84",
         grass: "#a7c957",
         smokeDust: "#8d7b68", 
-        smokeNormal: "#dcc7aa", 
+        smokeNormal: "#decbb1", 
         skidMark: "rgba(60, 50, 40, 0.3)"
     };
 
     const config = {
-        width: 500,
-        height: 850,
-        friction: 0.985,
-        offRoadFriction: 0.93,
-        driftFriction: 0.965,
-        turnSpeed: 0.058,
-        accel: 0.36,
-        maxSpeed: 13.5, 
-        lapsToWin: 3,
-        cameraLerpPos: 0.12,
-        cameraLerpAngle: 0.038,
-        zoom: 0.5,
-        trackWidth: 380
+        width: 500, height: 850, friction: 0.985, offRoadFriction: 0.93, driftFriction: 0.965,
+        turnSpeed: 0.058, accel: 0.36, maxSpeed: 13.5, lapsToWin: 3, cameraLerpPos: 0.12, cameraLerpAngle: 0.038, zoom: 0.5, trackWidth: 380
     };
 
-    const joystick = {
-        active: false,
-        visible: true,
-        baseX: 250, 
-        baseY: 720,
-        handleX: 250,
-        handleY: 720,
-        radius: 75,
-        inputX: 0,
-        inputY: 0,
-        opacity: 0.35
-    };
+    const joystick = { active: false, visible: true, baseX: 250, baseY: 720, handleX: 250, handleY: 720, radius: 75, inputX: 0, inputY: 0, opacity: 0.35 };
 
     const quotes = [
-        "热爱，是唯一的借口。",
-        "我不是想赢，我只是不想输。",
-        "人这一辈子，总得为点什么拼命。",
-        "你打算什么时候在这儿留下你的名字？",
-        "奉献精神就是：你明知道会输，但依然全力以赴。",
-        "这不只是速度，这是我的尊严。",
-        "胜负未定，你我皆是黑马。",
-        "只有当你想赢的时候，你才有可能赢。",
-        "英雄不是没有眼泪，而是含着眼泪奔跑。",
-        "巴音布鲁克，没有终点。"
+        "热爱，是唯一的借口。", "我不是想赢，我只是不想输。", "人这一辈子，总得为点什么拼命。", 
+        "奉献精神就是：你明知道会输，但依然全力以赴。", "这不只是速度，这是我的尊严。", 
+        "只有当你想赢的时候，你才有可能赢。", "英雄不是没有眼泪，而是含着眼泪奔跑。", "巴音布鲁克，没有终点。"
     ];
 
-    let bestRecord = Infinity;
-    let trees = [], shrubs = [], confetti = [];
-    let gameState = 'START';
-    let keys = {};
-    let player, ai;
-    let raceStartTime = 0;
-    let finishers = [];
-    let postRaceTimer = 5;
-    let postRaceInterval = null;
-    let isCameraRotationEnabled = true;
-    let showStartArrow = false; 
-    let arrowOpacity = 0;
+    let bestRecord = Infinity, trees = [], shrubs = [], confetti = [], gameState = 'START';
+    let keys = {}, player, ai, raceStartTime = 0, finishers = [], postRaceTimer = 5, postRaceInterval = null;
+    let isCameraRotationEnabled = true, showStartArrow = false, arrowOpacity = 0;
     const camera = { x: 0, y: 0, angle: 0 };
 
     canvas.width = config.width;
     canvas.height = config.height;
 
     const trackPoints = [
-        {x: 200, y: 200}, {x: 1300, y: 150}, {x: 2300, y: 550},
-        {x: 2000, y: 1300}, {x: 2600, y: 1900}, {x: 1500, y: 2700},
-        {x: 0, y: 2900}, {x: -900, y: 2100}, {x: -1600, y: 1400}, {x: -700, y: 600}
+        {x: 200, y: 200}, {x: 1300, y: 150}, {x: 2300, y: 550}, {x: 2000, y: 1300}, 
+        {x: 2600, y: 1900}, {x: 1500, y: 2700}, {x: 0, y: 2900}, {x: -900, y: 2100}, 
+        {x: -1600, y: 1400}, {x: -700, y: 600}
     ];
-
-    function getDistanceToTrack(px, py) {
-        let minDistance = Infinity;
-        for (let i = 0; i < trackPoints.length; i++) {
-            const p1 = trackPoints[i], p2 = trackPoints[(i + 1) % trackPoints.length];
-            const dx = p2.x - p1.x, dy = p2.y - p1.y, l2 = dx * dx + dy * dy;
-            let t = Math.max(0, Math.min(1, ((px - p1.x) * dx + (py - p1.y) * dy) / l2));
-            const dist = Math.sqrt((px - (p1.x + t * dx)) ** 2 + (py - (p1.y + t * dy)) ** 2);
-            if (dist < minDistance) minDistance = dist;
-        }
-        return minDistance;
-    }
-
-    class SmokeParticle {
-        constructor(x, y, isDrift, isOffRoad) {
-            this.x = x; this.y = y;
-            this.size = Math.random() * (isDrift ? 28 : 14) + (isOffRoad ? 20 : 8);
-            this.life = 1.0;
-            this.vx = (Math.random() - 0.5) * 2; this.vy = (Math.random() - 0.5) * 2;
-            this.color = isOffRoad ? COLORS.smokeDust : COLORS.smokeNormal;
-        }
-        update() { this.x += this.vx; this.y += this.vy; this.life -= 0.018; this.size += 0.8; }
-        draw() {
-            ctx.save(); ctx.globalAlpha = this.life * 0.4; ctx.fillStyle = this.color;
-            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-        }
-    }
-
-    class SkidMark {
-        constructor(x, y, angle) { this.x = x; this.y = y; this.angle = angle; this.life = 1.0; }
-        update() { this.life -= 0.006; }
-        draw() {
-            ctx.save(); ctx.globalAlpha = this.life * 0.3; ctx.fillStyle = COLORS.skidMark;
-            ctx.translate(this.x, this.y); ctx.rotate(this.angle);
-            ctx.fillRect(-15, -12, 30, 4); ctx.fillRect(-15, 8, 30, 4); ctx.restore();
-        }
-    }
 
     class Car {
         constructor(x, y, color, name, isAI = false) {
             this.x = x; this.y = y; this.color = color; this.name = name;
-            this.angle = 0; this.speed = 0; 
-            this.isAI = isAI;
-            this.drifting = false; this.isOffRoad = false; this.driftAngle = 0;
-            this.laps = 0; this.checkpoint = 0; this.aiTargetIdx = 1;
-            this.width = 46; this.height = 26; this.radius = 24;
-            this.totalTime = null; this.isFinished = false; 
-            this.speedMultiplier = 1.0; 
+            this.angle = 0; this.speed = 0; this.isAI = isAI; this.drifting = false;
+            this.isOffRoad = false; this.driftAngle = 0; this.laps = 0; this.checkpoint = 0;
+            this.aiTargetIdx = 1; this.width = 46; this.height = 26; this.radius = 24;
+            this.totalTime = null; this.isFinished = false; this.speedMultiplier = 1.0;
             this.particles = []; this.skidMarks = [];
         }
 
         update() {
             this.particles.forEach(p => p.update()); this.particles = this.particles.filter(p => p.life > 0);
             this.skidMarks.forEach(s => s.update()); this.skidMarks = this.skidMarks.filter(s => s.life > 0);
-
             if (gameState === 'START') return;
 
             const dist = getDistanceToTrack(this.x, this.y);
             this.isOffRoad = dist > config.trackWidth / 2;
 
             if (!this.isFinished) {
-                if (this.isAI) this.updateAI();
-                else this.updatePlayer();
+                if (this.isAI) this.updateAI(); else this.updatePlayer();
 
-                // 读秒阶段锁定物理位移，但保留输入状态
-                if (gameState === 'COUNTDOWN') {
-                    this.speed = 0;
-                }
+                if (gameState === 'COUNTDOWN') this.speed = 0;
 
                 let moveAngle = this.angle;
                 const currentFriction = this.isOffRoad ? config.offRoadFriction : config.friction;
                 
                 if (this.drifting) {
                     this.speed *= config.driftFriction; moveAngle += this.driftAngle;
-                    for(let i=0; i<4; i++) this.emitParticle(true);
+                    for(let i=0; i<4; i++) this.particles.push(new SmokeParticle(this.x - Math.cos(this.angle)*22, this.y - Math.sin(this.angle)*22, true, this.isOffRoad));
                     if (Math.abs(this.speed) > 2.5) this.skidMarks.push(new SkidMark(this.x, this.y, this.angle + this.driftAngle));
                 } else {
                     this.speed *= currentFriction; this.driftAngle *= 0.8;
-                    if (Math.abs(this.speed) > 4.5) this.emitParticle(false);
+                    if (Math.abs(this.speed) > 4.5) this.particles.push(new SmokeParticle(this.x - Math.cos(this.angle)*22, this.y - Math.sin(this.angle)*22, false, this.isOffRoad));
                 }
 
-                const speedLimit = this.isOffRoad ? config.maxSpeed * 0.45 : (this.drifting ? config.maxSpeed * 0.75 : config.maxSpeed * this.speedMultiplier);
+                const speedLimit = this.isOffRoad ? config.maxSpeed * 0.45 : config.maxSpeed * this.speedMultiplier;
                 if (this.speed > speedLimit) this.speed -= 0.6;
 
                 this.x += Math.cos(moveAngle) * this.speed;
@@ -461,11 +260,6 @@
                 this.speed *= 0.95; this.x += Math.cos(this.angle) * this.speed; this.y += Math.sin(this.angle) * this.speed;
             }
             this.handleCollisions();
-        }
-
-        emitParticle(isDrift) {
-            const backX = this.x - Math.cos(this.angle) * 22, backY = this.y - Math.sin(this.angle) * 22;
-            this.particles.push(new SmokeParticle(backX, backY, isDrift, this.isOffRoad));
         }
 
         updatePlayer() {
@@ -484,7 +278,6 @@
                 while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
                 while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
 
-                // 核心修改：仅在竞赛时允许更新赛车角度，读秒时角度不动
                 if (gameState === 'RACING') {
                     this.angle += angleDiff * 0.15; 
                     this.drifting = Math.abs(angleDiff) > 0.7 && this.speed > 7;
@@ -493,9 +286,7 @@
                     }
                     this.speed += config.accel * Math.min(magnitude, 1);
                 }
-            } else {
-                this.drifting = false; this.speed *= 0.95;
-            }
+            } else { this.drifting = false; this.speed *= 0.95; }
             if (this.speed < 0) this.speed = 0;
             speedVal.innerText = Math.abs(Math.round(this.speed * 18)) + " KM/H";
         }
@@ -508,8 +299,7 @@
             let desiredAngle = Math.atan2(dy, dx), angleDiff = desiredAngle - this.angle;
             while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
             while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
-            const steeringForce = lookAheadDist < 400 ? 0.32 : 0.22; 
-            this.angle += angleDiff * steeringForce;
+            this.angle += angleDiff * (lookAheadDist < 400 ? 0.32 : 0.22);
             let throttle = Math.abs(angleDiff) > 0.3 ? 0.45 : 0.98; 
             if (lookAheadDist < 220) this.aiTargetIdx = (this.aiTargetIdx + 1) % trackPoints.length;
             this.speed += config.accel * throttle;
@@ -518,38 +308,31 @@
         }
 
         handleCollisions() {
-            const other = this.isAI ? player : ai;
-            if (!other) return;
+            const other = this.isAI ? player : ai; if (!other) return;
             const dx = other.x - this.x, dy = other.y - this.y, dist = Math.sqrt(dx*dx + dy*dy), minDist = this.radius + other.radius;
             if (dist < minDist) {
-                const angle = Math.atan2(dy, dx);
-                this.x -= Math.cos(angle) * 4; this.y -= Math.sin(angle) * 4;
-                this.speed *= 0.65;
+                const angle = Math.atan2(dy, dx); this.x -= Math.cos(angle) * 4; this.y -= Math.sin(angle) * 4; this.speed *= 0.65;
             }
         }
 
         checkProgress() {
             let nextCpIdx = (this.checkpoint + 1) % trackPoints.length;
             let cp = trackPoints[nextCpIdx], dist = Math.sqrt((this.x - cp.x)**2 + (this.y - cp.y)**2);
-            let detectionRange = nextCpIdx === 0 ? 180 : 450;
-            if (dist < detectionRange) {
+            if (dist < (nextCpIdx === 0 ? 180 : 450)) {
                 this.checkpoint = nextCpIdx;
                 if (this.checkpoint === 0) {
                     this.laps++;
                     if (!this.isAI) {
                         lapVal.innerText = Math.min(this.laps + 1, config.lapsToWin);
                         if (this.laps === config.lapsToWin - 1) {
-                            lastLapNotice.style.display = 'block';
-                            lastLapNotice.classList.add('flash-twice');
+                            lastLapNotice.style.display = 'block'; lastLapNotice.classList.add('flash-twice');
                             setTimeout(() => { lastLapNotice.classList.remove('flash-twice'); lastLapNotice.style.display = 'none'; }, 1500); 
                         }
                     }
                     if (this.laps >= config.lapsToWin) {
-                        this.isFinished = true; this.totalTime = ((Date.now() - raceStartTime) / 1000).toFixed(2);
-                        finishers.push(this);
+                        this.isFinished = true; this.totalTime = ((Date.now() - raceStartTime) / 1000).toFixed(2); finishers.push(this);
                         if (!this.isAI && parseFloat(this.totalTime) < bestRecord) {
-                            bestRecord = parseFloat(this.totalTime);
-                            bestRecordEl.innerText = `历史最快纪录: ${bestRecord}s`;
+                            bestRecord = parseFloat(this.totalTime); bestRecordEl.innerText = `历史最快纪录: ${bestRecord}s`;
                         }
                         if (finishers.length === 1 && !this.isAI) spawnConfetti();
                         if (finishers.length === 2) { if(postRaceInterval) clearInterval(postRaceInterval); showLeaderboard(); }
@@ -563,13 +346,8 @@
             this.skidMarks.forEach(s => s.draw()); this.particles.forEach(p => p.draw());
             ctx.save(); ctx.translate(this.x, this.y); 
             if (showStartArrow && !this.isAI) {
-                ctx.save();
-                const bounce = Math.sin(Date.now() / 150) * 8;
-                ctx.globalAlpha = arrowOpacity;
-                ctx.translate(0, -70 + bounce);
-                ctx.fillStyle = "#f1c40f"; ctx.strokeStyle = "white"; ctx.lineWidth = 3;
-                ctx.beginPath(); ctx.moveTo(-15, -25); ctx.lineTo(15, -25); ctx.lineTo(0, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
-                ctx.restore();
+                ctx.save(); const bounce = Math.sin(Date.now() / 150) * 8; ctx.globalAlpha = arrowOpacity; ctx.translate(0, -70 + bounce);
+                ctx.fillStyle = "#f1c40f"; ctx.strokeStyle = "white"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-15, -25); ctx.lineTo(15, -25); ctx.lineTo(0, 0); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
             }
             ctx.rotate(this.angle + (this.drifting ? this.driftAngle : 0));
             ctx.shadowBlur = 15; ctx.shadowColor = "rgba(0,0,0,0.4)";
@@ -577,18 +355,40 @@
             ctx.fillStyle = this.color; ctx.beginPath(); ctx.moveTo(-this.width/2, -this.height/2); ctx.lineTo(this.width/2 - 14, -this.height/2); ctx.quadraticCurveTo(this.width/2 + 10, 0, this.width/2 - 14, this.height/2); ctx.lineTo(-this.width/2, this.height/2); ctx.closePath(); ctx.fill();
             ctx.fillStyle = "#1a1a1a"; ctx.beginPath(); ctx.ellipse(0, 0, 14, 10, 0, 0, Math.PI * 2); ctx.fill();
             ctx.fillStyle = "rgba(255,255,255,0.25)"; ctx.beginPath(); ctx.ellipse(6, 0, 8, 8, 0, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = "white"; ctx.font = "bold 12px Arial"; ctx.textAlign = "center"; ctx.fillText(this.isAI ? "02" : "01", -12, 5);
-            ctx.restore();
+            ctx.fillStyle = "white"; ctx.font = "bold 12px Arial"; ctx.textAlign = "center"; ctx.fillText(this.isAI ? "02" : "01", -12, 5); ctx.restore();
         }
     }
 
-    function spawnConfetti() { for(let i=0; i<180; i++) confetti.push({ x: player.x, y: player.y, color: ['#f1c40f', '#e74c3c', '#3498db', '#ffffff'][i%4], size: Math.random()*10+5, vx: (Math.random()-0.5)*25, vy: (Math.random()-0.5)*25-10, gravity: 0.4, rotation: Math.random()*360, rSpeed: Math.random()*20-10, update: function(){this.x+=this.vx; this.vy+=this.gravity; this.y+=this.vy; this.rotation+=this.rSpeed;}, draw: function(){ ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rotation*Math.PI/180); ctx.fillStyle=this.color; ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size); ctx.restore();} }); }
+    class SmokeParticle {
+        constructor(x, y, isDrift, isOffRoad) { this.x = x; this.y = y; this.size = Math.random()*(isDrift ? 28 : 14)+(isOffRoad ? 20 : 8); this.life = 1.0; this.vx = (Math.random()-0.5)*2; this.vy = (Math.random()-0.5)*2; this.color = isOffRoad ? COLORS.smokeDust : COLORS.smokeNormal; }
+        update() { this.x += this.vx; this.y += this.vy; this.life -= 0.018; this.size += 0.8; }
+        draw() { ctx.save(); ctx.globalAlpha = this.life*0.4; ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill(); ctx.restore(); }
+    }
+
+    class SkidMark {
+        constructor(x, y, angle) { this.x = x; this.y = y; this.angle = angle; this.life = 1.0; }
+        update() { this.life -= 0.006; }
+        draw() { ctx.save(); ctx.globalAlpha = this.life*0.3; ctx.fillStyle = COLORS.skidMark; ctx.translate(this.x, this.y); ctx.rotate(this.angle); ctx.fillRect(-15, -12, 30, 4); ctx.fillRect(-15, 8, 30, 4); ctx.restore(); }
+    }
+
+    function spawnConfetti() { for(let i=0; i<180; i++) confetti.push({ x: player.x, y: player.y, color: ['#f1c40f', '#e74c3c', '#3498db', '#ffffff'][i%4], size: Math.random()*10+5, vx: (Math.random()-0.5)*25, vy: (Math.random()-0.5)*25-10, gravity: 0.4, rotation: Math.random()*360, rSpeed: Math.random()*20-10 }); }
+
+    function getDistanceToTrack(px, py) {
+        let minDistance = Infinity;
+        for (let i = 0; i < trackPoints.length; i++) {
+            const p1 = trackPoints[i], p2 = trackPoints[(i + 1) % trackPoints.length];
+            const dx = p2.x - p1.x, dy = p2.y - p1.y, l2 = dx * dx + dy * dy;
+            let t = Math.max(0, Math.min(1, ((px - p1.x) * dx + (py - p1.y) * dy) / l2));
+            const dist = Math.sqrt((px - (p1.x + t * dx)) ** 2 + (py - (p1.y + t * dy)) ** 2);
+            if (dist < minDistance) minDistance = dist;
+        }
+        return minDistance;
+    }
 
     function drawWorld() {
         ctx.fillStyle = COLORS.grass; ctx.fillRect(-15000, -15000, 30000, 30000);
         ctx.lineJoin = "round"; ctx.lineCap = "round";
-        ctx.strokeStyle = "rgba(0,0,0,0.08)"; ctx.lineWidth = config.trackWidth + 15;
-        ctx.beginPath(); ctx.moveTo(trackPoints[0].x, trackPoints[0].y); trackPoints.forEach(p => ctx.lineTo(p.x, p.y)); ctx.closePath(); ctx.stroke();
+        ctx.strokeStyle = "rgba(0,0,0,0.08)"; ctx.lineWidth = config.trackWidth + 15; ctx.beginPath(); ctx.moveTo(trackPoints[0].x, trackPoints[0].y); trackPoints.forEach(p => ctx.lineTo(p.x, p.y)); ctx.closePath(); ctx.stroke();
         ctx.strokeStyle = COLORS.track; ctx.lineWidth = config.trackWidth; ctx.stroke();
         ctx.strokeStyle = COLORS.trackDetail; ctx.lineWidth = config.trackWidth - 40; ctx.setLineDash([2, 12]); ctx.stroke(); ctx.setLineDash([]);
         trees.forEach(t => {
@@ -606,11 +406,8 @@
         ctx.setTransform(1, 0, 0, 1, 0, 0); 
         if (joystick.visible) {
             ctx.save(); ctx.globalAlpha = joystick.active ? 0.85 : joystick.opacity;
-            ctx.beginPath(); ctx.arc(joystick.baseX, joystick.baseY, joystick.radius, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(255, 255, 255, 0.08)"; ctx.fill();
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.2)"; ctx.lineWidth = 4; ctx.stroke();
-            ctx.beginPath(); ctx.arc(joystick.handleX, joystick.handleY, joystick.radius * 0.45, 0, Math.PI * 2);
-            ctx.fillStyle = "#fff"; ctx.shadowBlur = 15; ctx.shadowColor = "rgba(241, 196, 15, 0.5)"; ctx.fill();
+            ctx.beginPath(); ctx.arc(joystick.baseX, joystick.baseY, joystick.radius, 0, Math.PI * 2); ctx.fillStyle = "rgba(255, 255, 255, 0.08)"; ctx.fill(); ctx.strokeStyle = "rgba(255, 255, 255, 0.2)"; ctx.lineWidth = 4; ctx.stroke();
+            ctx.beginPath(); ctx.arc(joystick.handleX, joystick.handleY, joystick.radius * 0.45, 0, Math.PI * 2); ctx.fillStyle = "#fff"; ctx.shadowBlur = 15; ctx.shadowColor = "rgba(241, 196, 15, 0.5)"; ctx.fill();
             ctx.restore();
         }
     }
@@ -619,13 +416,11 @@
         if (gameState !== 'RACING' && gameState !== 'COUNTDOWN') return;
         const rect = canvas.getBoundingClientRect(), touches = e.touches ? e.touches : [e], touch = touches[0];
         const tx = (touch.clientX - rect.left) * (canvas.width / rect.width), ty = (touch.clientY - rect.top) * (canvas.height / rect.height);
-        if (e.type === 'touchstart' || e.type === 'mousedown') {
-            joystick.active = true; joystick.baseX = tx; joystick.baseY = ty; joystick.handleX = tx; joystick.handleY = ty;
-        }
+        if (e.type === 'touchstart' || e.type === 'mousedown') { joystick.active = true; joystick.baseX = tx; joystick.baseY = ty; joystick.handleX = tx; joystick.handleY = ty; }
         if (joystick.active && (e.type === 'touchmove' || e.type === 'mousemove')) {
-            const dx = tx - joystick.baseX, dy = ty - joystick.baseY, dist = Math.sqrt(dx*dx + dy*dy), maxDist = joystick.radius;
+            const dx = tx - joystick.baseX, dy = ty - joystick.baseY, dist = Math.sqrt(dx*dx+dy*dy), maxDist = joystick.radius;
             if (dist < maxDist) { joystick.handleX = tx; joystick.handleY = ty; }
-            else { const angle = Math.atan2(dy, dx); joystick.handleX = joystick.baseX + Math.cos(angle) * maxDist; joystick.handleY = joystick.baseY + Math.sin(angle) * maxDist; }
+            else { const angle = Math.atan2(dy, dx); joystick.handleX = joystick.baseX + Math.cos(angle)*maxDist; joystick.handleY = joystick.baseY + Math.sin(angle)*maxDist; }
             joystick.inputX = (joystick.handleX - joystick.baseX) / maxDist; joystick.inputY = (joystick.handleY - joystick.baseY) / maxDist;
         }
     }
@@ -638,7 +433,7 @@
     }
 
     function showLeaderboard() {
-        gameState = 'END'; document.getElementById('end-screen').classList.remove('hidden');
+        gameState = 'END'; document.getElementById('end-screen').classList.remove('hidden'); 
         const list = document.getElementById('leaderboard-list'); list.innerHTML = "";
         const all = [player, ai].sort((a,b) => (a.isFinished && b.isFinished) ? a.totalTime - b.totalTime : (a.isFinished ? -1 : 1));
         all.forEach((c, i) => { const div = document.createElement('div'); div.style.display="flex"; div.style.justifyContent="space-between"; div.style.padding="15px"; div.style.fontSize="1.4rem"; div.style.borderBottom="1px solid rgba(255,255,255,0.05)"; div.style.color = (i===0 && c.isFinished) ? "#f1c40f" : "#fff"; div.innerHTML = `<span>${i+1}. ${c.name}</span><span>${c.isFinished ? c.totalTime+'s' : 'DNF'}</span>`; list.appendChild(div); });
@@ -647,18 +442,14 @@
     function loop() {
         ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = COLORS.grass; ctx.fillRect(0,0,canvas.width,canvas.height);
         if (gameState !== 'START') {
-            if (player) {
-                camera.x += (player.x - camera.x) * config.cameraLerpPos; 
-                camera.y += (player.y - camera.y) * config.cameraLerpPos;
-            }
+            if (player) { camera.x += (player.x - camera.x)*config.cameraLerpPos; camera.y += (player.y - camera.y)*config.cameraLerpPos; }
             let targetAngle = isCameraRotationEnabled ? -player.angle - Math.PI/2 : 0, diff = targetAngle - camera.angle;
             while (diff < -Math.PI) diff += Math.PI * 2; while (diff > Math.PI) diff -= Math.PI * 2;
             camera.angle += diff * config.cameraLerpAngle;
-
             ctx.translate(canvas.width/2, canvas.height/2); ctx.rotate(camera.angle); ctx.scale(config.zoom, config.zoom); ctx.translate(-camera.x, -camera.y);
             drawWorld();
             if (ai) { ai.update(); ai.draw(); } if (player) { player.update(); player.draw(); }
-            confetti.forEach(c => { c.update(); c.draw(); });
+            confetti.forEach(c => { c.x+=c.vx; c.vy+=c.gravity; c.y+=c.vy; c.rotation+=c.rSpeed; ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.rotation*Math.PI/180); ctx.fillStyle=c.color; ctx.fillRect(-c.size/2, -c.size/2, c.size, c.size); ctx.restore(); });
             if (gameState === 'RACING') timerVal.innerText = `时间: ${((Date.now() - raceStartTime)/1000).toFixed(1)}s`;
             drawUI();
         }
@@ -666,49 +457,62 @@
     }
 
     function startGame() {
+        if (gameState !== 'START') return;
+        startBtn.disabled = true;
+
+        // HUD 重置
+        speedVal.innerText = "0 KM/H";
+        lapVal.innerText = "1";
+        timerVal.innerText = "时间: 0.0s";
+
         if (postRaceInterval) clearInterval(postRaceInterval);
         postRaceTimerEl.style.display = 'none';
+        
         isCameraRotationEnabled = document.getElementById('camera-rotate-toggle').checked;
-        const selectedDifficulty = parseFloat(document.querySelector('input[name="difficulty"]:checked').value);
+        const diffVal = parseFloat(document.querySelector('input[name="difficulty"]:checked').value);
         document.getElementById('start-screen').style.opacity = '0';
         setTimeout(() => document.getElementById('start-screen').classList.add('hidden'), 500);
+        
         player = new Car(trackPoints[0].x, trackPoints[0].y + 90, "#f1c40f", "张驰 (玩家)");
         ai = new Car(trackPoints[0].x, trackPoints[0].y - 90, "#3498db", "林臻东 (AI)", true);
-        player.speedMultiplier = 1.0; 
-        ai.speedMultiplier = selectedDifficulty; 
+        ai.speedMultiplier = diffVal; 
         camera.x = player.x; camera.y = player.y;
         finishers = []; confetti = []; initEnvironment();
+        
         gameState = 'COUNTDOWN';
         countdownEl.classList.remove('hidden');
         let c = 3;
-        (function tick() {
-            if(c > 0) { countdownEl.innerText = c; c--; setTimeout(tick, 1000); } 
-            else if (c === 0) { countdownEl.innerText = "GO!"; c--; setTimeout(tick, 1000); } 
-            else {
+        const tick = () => {
+            if (c > 0) {
+                countdownEl.innerText = c;
+                c--; setTimeout(tick, 1000);
+            } else if (c === 0) {
+                countdownEl.innerText = "GO!";
+                c--; setTimeout(tick, 1000);
+            } else {
                 countdownEl.classList.add('hidden');
-                gameState = 'RACING';
-                raceStartTime = Date.now();
+                gameState = 'RACING'; raceStartTime = Date.now();
                 showStartArrow = true; arrowOpacity = 1.0;
                 setTimeout(() => {
-                    const fade = setInterval(() => {
-                        arrowOpacity -= 0.1;
-                        if(arrowOpacity <= 0) { clearInterval(fade); showStartArrow = false; }
-                    }, 50);
-                }, 2500); 
+                    const f = setInterval(() => { arrowOpacity -= 0.1; if(arrowOpacity <= 0) { clearInterval(f); showStartArrow = false; } }, 50);
+                }, 2500);
             }
-        })();
+        };
+        tick();
     }
 
     function initEnvironment() {
-        trees = []; shrubs = []; trackPoints.forEach(p => { for(let j=0; j<14; j++) trees.push({x: p.x+(Math.random()-0.5)*2400, y:p.y+(Math.random()-0.5)*2400, size: 40+Math.random()*50}); });
+        trees = []; trackPoints.forEach(p => { for(let j=0; j<14; j++) trees.push({x: p.x+(Math.random()-0.5)*2400, y:p.y+(Math.random()-0.5)*2400, size: 40+Math.random()*50, color: ['#1b5e20', '#2e7d32', '#4caf50'][Math.floor(Math.random()*3)]}); });
         trees = trees.filter(t => getDistanceToTrack(t.x, t.y) > config.trackWidth/2 + 70);
     }
 
     function resetGame() { 
+        startBtn.disabled = false;
         quoteEl.innerText = quotes[Math.floor(Math.random() * quotes.length)];
         document.getElementById('end-screen').classList.add('hidden'); 
         document.getElementById('start-screen').style.opacity = '1'; 
         document.getElementById('start-screen').classList.remove('hidden'); 
+        gameState = 'START';
     }
 
     window.addEventListener('keydown', e => keys[e.code] = true);
