@@ -178,6 +178,13 @@
     const bestRecordEl = document.getElementById('best-record-display');
     const startBtn = document.getElementById('start-btn');
 
+    // --- 背景音乐配置 ---
+    // 修改为相对路径，请确保你的音乐文件命名为 bgm.mp3 并与此 HTML 放在同一 GitHub 目录下
+    const bgm = new Audio("./f1.mp3");
+    bgm.loop = true;
+    bgm.volume = 0.5;
+    bgm.onerror = () => console.warn("背景音乐读取失败。请检查文件名是否为 bgm.mp3 且与 HTML 处于同一路径下。");
+
     const COLORS = {
         track: "#d2b48c", 
         trackDetail: "#c9ad84",
@@ -235,6 +242,7 @@
             if (!this.isFinished) {
                 if (this.isAI) this.updateAI(); else this.updatePlayer();
 
+                // 读秒阶段锁死位移
                 if (gameState === 'COUNTDOWN') this.speed = 0;
 
                 let moveAngle = this.angle;
@@ -278,6 +286,7 @@
                 while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
                 while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
 
+                // 读秒时锁死转向
                 if (gameState === 'RACING') {
                     this.angle += angleDiff * 0.15; 
                     this.drifting = Math.abs(angleDiff) > 0.7 && this.speed > 7;
@@ -288,7 +297,7 @@
                 }
             } else { this.drifting = false; this.speed *= 0.95; }
             if (this.speed < 0) this.speed = 0;
-            speedVal.innerText = Math.abs(Math.round(this.speed * 18)) + " KM/H";
+            if (!this.isAI) speedVal.innerText = Math.abs(Math.round(this.speed * 18)) + " KM/H";
         }
 
         updateAI() {
@@ -394,7 +403,8 @@
         trees.forEach(t => {
             ctx.save(); ctx.translate(t.x, t.y); ctx.fillStyle="rgba(0,0,0,0.1)"; ctx.beginPath(); ctx.ellipse(5, 5, t.size*0.5, t.size*0.3, 0, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle="#3e2723"; ctx.fillRect(-t.size*0.08, 0, t.size*0.16, t.size*0.5);
-            ["#1b5e20", "#2e7d32", "#4caf50"].forEach((c, i) => { ctx.fillStyle=c; ctx.beginPath(); ctx.arc(0, -t.size*0.4*i, t.size*(1-i*0.25), 0, Math.PI*2); ctx.fill(); });
+            const color = t.color || "#2e7d32";
+            ctx.fillStyle=color; ctx.beginPath(); ctx.arc(0, 0, t.size, 0, Math.PI*2); ctx.fill();
             ctx.restore();
         });
         ctx.save(); ctx.translate(trackPoints[0].x, trackPoints[0].y); ctx.rotate(Math.atan2(trackPoints[1].y - trackPoints[0].y, trackPoints[1].x - trackPoints[0].x) + Math.PI/2);
@@ -460,10 +470,23 @@
         if (gameState !== 'START') return;
         startBtn.disabled = true;
 
-        // HUD 重置
+        // --- HUD 重置 ---
         speedVal.innerText = "0 KM/H";
         lapVal.innerText = "1";
         timerVal.innerText = "时间: 0.0s";
+
+        // --- BGM 播放逻辑 ---
+        try {
+            bgm.load(); // 强制重新加载
+            const playPromise = bgm.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("音频播放受阻:", error);
+                });
+            }
+        } catch (e) {
+            console.warn("音频系统异常:", e);
+        }
 
         if (postRaceInterval) clearInterval(postRaceInterval);
         postRaceTimerEl.style.display = 'none';
@@ -513,6 +536,8 @@
         document.getElementById('start-screen').style.opacity = '1'; 
         document.getElementById('start-screen').classList.remove('hidden'); 
         gameState = 'START';
+        bgm.pause(); // 重置时暂停音乐
+        bgm.currentTime = 0;
     }
 
     window.addEventListener('keydown', e => keys[e.code] = true);
