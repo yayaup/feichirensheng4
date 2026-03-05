@@ -179,8 +179,7 @@
     const startBtn = document.getElementById('start-btn');
 
     // --- 背景音乐配置 ---
-    // 修改为相对路径，请确保你的音乐文件命名为 bgm.mp3 并与此 HTML 放在同一 GitHub 目录下
-    const bgm = new Audio("./f1.mp3");
+    const bgm = new Audio("./bgm.mp3");
     bgm.loop = true;
     bgm.volume = 0.5;
     bgm.onerror = () => console.warn("背景音乐读取失败。请检查文件名是否为 bgm.mp3 且与 HTML 处于同一路径下。");
@@ -203,7 +202,7 @@
 
     const quotes = [
         "热爱，是唯一的借口。", "我不是想赢，我只是不想输。", "人这一辈子，总得为点什么拼命。", 
-        "奉献精神就是：你明知道会输，但依然全力以赴。", "这不只是速度，这是我的尊严。", 
+        "奉献精神就是：你明知道会输，但依然全力赴。", "这不只是速度，这是我的尊严。", 
         "只有当你想赢的时候，你才有可能赢。", "英雄不是没有眼泪，而是含着眼泪奔跑。", "巴音布鲁克，没有终点。"
     ];
 
@@ -242,7 +241,6 @@
             if (!this.isFinished) {
                 if (this.isAI) this.updateAI(); else this.updatePlayer();
 
-                // 读秒阶段锁死位移
                 if (gameState === 'COUNTDOWN') this.speed = 0;
 
                 let moveAngle = this.angle;
@@ -286,7 +284,6 @@
                 while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
                 while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
 
-                // 读秒时锁死转向
                 if (gameState === 'RACING') {
                     this.angle += angleDiff * 0.15; 
                     this.drifting = Math.abs(angleDiff) > 0.7 && this.speed > 7;
@@ -400,13 +397,34 @@
         ctx.strokeStyle = "rgba(0,0,0,0.08)"; ctx.lineWidth = config.trackWidth + 15; ctx.beginPath(); ctx.moveTo(trackPoints[0].x, trackPoints[0].y); trackPoints.forEach(p => ctx.lineTo(p.x, p.y)); ctx.closePath(); ctx.stroke();
         ctx.strokeStyle = COLORS.track; ctx.lineWidth = config.trackWidth; ctx.stroke();
         ctx.strokeStyle = COLORS.trackDetail; ctx.lineWidth = config.trackWidth - 40; ctx.setLineDash([2, 12]); ctx.stroke(); ctx.setLineDash([]);
+        
+        // --- 优化后的立体树木 ---
         trees.forEach(t => {
-            ctx.save(); ctx.translate(t.x, t.y); ctx.fillStyle="rgba(0,0,0,0.1)"; ctx.beginPath(); ctx.ellipse(5, 5, t.size*0.5, t.size*0.3, 0, 0, Math.PI*2); ctx.fill();
-            ctx.fillStyle="#3e2723"; ctx.fillRect(-t.size*0.08, 0, t.size*0.16, t.size*0.5);
-            const color = t.color || "#2e7d32";
-            ctx.fillStyle=color; ctx.beginPath(); ctx.arc(0, 0, t.size, 0, Math.PI*2); ctx.fill();
+            ctx.save(); ctx.translate(t.x, t.y); 
+            // 1. 更真实的投影 (长投影，增加空间感)
+            ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+            ctx.beginPath();
+            ctx.ellipse(t.size * 0.35, t.size * 0.35, t.size * 1.1, t.size * 0.7, Math.PI / 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 2. 树干 (微小偏移产生厚度)
+            ctx.fillStyle = "#3e2723";
+            ctx.fillRect(-t.size * 0.1, -t.size * 0.1, t.size * 0.2, t.size * 0.4);
+
+            // 3. 层次化树冠 (深、中、浅色叠加，模拟体积)
+            // 底层深色
+            ctx.fillStyle = t.darkColor;
+            ctx.beginPath(); ctx.arc(0, 0, t.size, 0, Math.PI * 2); ctx.fill();
+            // 中间层基色 (略微偏移模拟光源来自左上方)
+            ctx.fillStyle = t.color;
+            ctx.beginPath(); ctx.arc(-t.size * 0.08, -t.size * 0.08, t.size * 0.8, 0, Math.PI * 2); ctx.fill();
+            // 顶层亮部
+            ctx.fillStyle = t.lightColor;
+            ctx.beginPath(); ctx.arc(-t.size * 0.2, -t.size * 0.2, t.size * 0.45, 0, Math.PI * 2); ctx.fill();
+            
             ctx.restore();
         });
+
         ctx.save(); ctx.translate(trackPoints[0].x, trackPoints[0].y); ctx.rotate(Math.atan2(trackPoints[1].y - trackPoints[0].y, trackPoints[1].x - trackPoints[0].x) + Math.PI/2);
         for(let x=-200; x<200; x+=50) for(let y=-25; y<25; y+=25) { ctx.fillStyle=(Math.floor(x/50)+Math.floor(y/25))%2===0?"#fff":"#111"; ctx.fillRect(x, y, 50, 25); }
         ctx.restore();
@@ -477,16 +495,12 @@
 
         // --- BGM 播放逻辑 ---
         try {
-            bgm.load(); // 强制重新加载
+            bgm.load(); 
             const playPromise = bgm.play();
             if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("音频播放受阻:", error);
-                });
+                playPromise.catch(error => { console.log("音频播放受阻:", error); });
             }
-        } catch (e) {
-            console.warn("音频系统异常:", e);
-        }
+        } catch (e) { console.warn("音频系统异常:", e); }
 
         if (postRaceInterval) clearInterval(postRaceInterval);
         postRaceTimerEl.style.display = 'none';
@@ -525,7 +539,24 @@
     }
 
     function initEnvironment() {
-        trees = []; trackPoints.forEach(p => { for(let j=0; j<14; j++) trees.push({x: p.x+(Math.random()-0.5)*2400, y:p.y+(Math.random()-0.5)*2400, size: 40+Math.random()*50, color: ['#1b5e20', '#2e7d32', '#4caf50'][Math.floor(Math.random()*3)]}); });
+        const palettes = [
+            { base: "#2e7d32", dark: "#1b5e20", light: "#66bb6a" },
+            { base: "#388e3c", dark: "#2e7d32", light: "#81c784" },
+            { base: "#1b5e20", dark: "#0d3b11", light: "#2e7d32" }
+        ];
+        trees = []; trackPoints.forEach(p => { 
+            for(let j=0; j<14; j++) {
+                const scheme = palettes[Math.floor(Math.random() * palettes.length)];
+                trees.push({
+                    x: p.x+(Math.random()-0.5)*2400, 
+                    y:p.y+(Math.random()-0.5)*2400, 
+                    size: 40+Math.random()*50, 
+                    color: scheme.base,
+                    darkColor: scheme.dark,
+                    lightColor: scheme.light
+                });
+            } 
+        });
         trees = trees.filter(t => getDistanceToTrack(t.x, t.y) > config.trackWidth/2 + 70);
     }
 
@@ -536,7 +567,7 @@
         document.getElementById('start-screen').style.opacity = '1'; 
         document.getElementById('start-screen').classList.remove('hidden'); 
         gameState = 'START';
-        bgm.pause(); // 重置时暂停音乐
+        bgm.pause(); 
         bgm.currentTime = 0;
     }
 
